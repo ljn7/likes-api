@@ -27,7 +27,7 @@ public class Like {
     @Column(name="id")
     private Long id;
     
-    @Column(name="like_id")
+    @Column(name="like_id", insertable = false, updatable = false)
     private Long likeId;
 
     @Column(name = "content_id")

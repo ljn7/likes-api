@@ -28,12 +28,15 @@ public class Content {
     @Column(name="id")
     private Long id;
 
-    @Column(name = "content_id", unique = true)
+    @Column(name = "content_id", unique = true, insertable = false, updatable = false)
     private Long contentId;
     
-    @Column(name="liked_user_id")
-    private List<Long> likedUsersId; 
+    @Column(name="total_likes")
+    private Long totalLikes;
 
+    @Column(name="belongs_to")
+    private Long userId;
+    
     @Column(name="created_at")
     @CreationTimestamp
     private LocalDateTime createdAt;
