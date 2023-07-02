@@ -1,11 +1,11 @@
 package com.service.likes.service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 
 import com.service.likes.model.Like;
@@ -34,7 +34,7 @@ public class LikeServiceImpl implements LikeService {
             
             
             return new HashMap<Like, HttpStatus>() {{
-                put(result, HttpStatus.CREATED);
+                put(result, HttpStatus.valueOf(200));
             }};
             
 
@@ -56,7 +56,7 @@ public class LikeServiceImpl implements LikeService {
             final Like like = likeRepository.findByUserIdAndContentId(userId, contentId);
             HttpStatus status;
             if (like != null)
-                status = HttpStatus.FOUND;
+                status = HttpStatus.valueOf(200);
             else 
                 status = HttpStatus.NOT_FOUND;
             return new HashMap<Like, HttpStatus>() {{

@@ -1,99 +1,109 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-                                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
-
-    
-    <!-- Create the "users" table -->
+    <!-- Create the "users" table if it doesn't exist -->
     <changeSet id="createUsersTable" author="ljn7">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="users" />
+            </not>
+        </preConditions>
         <createTable tableName="users">
             <column name="id" type="BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
+                <constraints primaryKey="true" nullable="false" />
             </column>
             <column name="user_id" type="BIGINT">
-                <constraints unique="true" nullable="false"/>
+                <constraints unique="true" nullable="false" />
             </column>
-            <column name="name" type="VARCHAR(255)"/>
+            <column name="name" type="VARCHAR(255)" />
             <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
-                <constraints nullable="false"/>
+                <constraints nullable="false" />
             </column>
         </createTable>
     </changeSet>
 
-    <!-- Create the "contents" table -->
+    <!-- Create the "contents" table if it doesn't exist -->
     <changeSet id="createContentsTable" author="ljn7">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="contents" />
+            </not>
+        </preConditions>
         <createTable tableName="contents">
             <column name="id" type="BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
+                <constraints primaryKey="true" nullable="false" />
             </column>
             <column name="content_id" type="BIGINT">
-                <constraints unique="true" nullable="false"/>
+                <constraints unique="true" nullable="false" />
             </column>
             <column name="total_likes" type="BIGINT" defaultValue="0">
-                <constraints nullable="false"/>
+                <constraints nullable="false" />
             </column>
             <column name="belongs_to" type="BIGINT">
-                <constraints nullable="false"/>
+                <constraints nullable="false" />
             </column>
             <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
-                <constraints nullable="false"/>
+                <constraints nullable="false" />
             </column>
         </createTable>
     </changeSet>
 
-    <!-- Create the "likes" table -->
+    <!-- Create the "likes" table if it doesn't exist -->
     <changeSet id="createLikesTable" author="ljn7">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="likes" />
+            </not>
+        </preConditions>
         <createTable tableName="likes">
             <column name="id" type="BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
+                <constraints primaryKey="true" nullable="false" />
             </column>
             <column name="like_id" type="BIGINT">
-                <constraints nullable="false"/>
+                <constraints unique="true" nullable="false" />
             </column>
             <column name="content_id" type="BIGINT">
-                <constraints nullable="false"/>
+                <constraints nullable="false" />
             </column>
             <column name="user_id" type="BIGINT">
-                <constraints nullable="false"/>
+                <constraints nullable="false" />
             </column>
             <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
-                <constraints nullable="false"/>
+                <constraints nullable="false" />
             </column>
         </createTable>
     </changeSet>
 
-    <!-- Create the "notifications" table -->
+    <!-- Create the "notifications" table if it doesn't exist -->
     <changeSet id="createNotificationsTable" author="ljn7">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="notifications" />
+            </not>
+        </preConditions>
         <createTable tableName="notifications">
             <column name="id" type="BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
+                <constraints primaryKey="true" nullable="false" />
             </column>
             <column name="notification_id" type="BIGINT">
-                <constraints unique="true" nullable="false"/>
+                <constraints unique="true" nullable="false" />
             </column>
             <column name="user_id" type="BIGINT">
-                <constraints nullable="false"/>
+                <constraints nullable="false" />
             </column>
-            <column name="message" type="VARCHAR(255)"/>
+            <column name="message" type="VARCHAR(255)" />
             <column name="is_read" type="BOOLEAN" defaultValue="false">
-                <constraints nullable="false"/>
+                <constraints nullable="false" />
             </column>
             <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
-                <constraints nullable="false"/>
+                <constraints nullable="false" />
             </column>
         </createTable>
     </changeSet>
 
-    <!-- Add foreign key constraint between notifications and users -->
-    <changeSet id="addForeignKey" author="ljn7">
-        <addForeignKeyConstraint baseTableName="notifications"
-                                 baseColumnNames="user_id"
-                                 constraintName="fk_notifications_user"
-                                 referencedTableName="users"
-                                 referencedColumnNames="id"
-                                 onDelete="CASCADE"
-                                 onUpdate="CASCADE"/>
+    <changeSet id="insertData" author="ljn7">
+        <sqlFile path="insert_data.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
 </databaseChangeLog>
